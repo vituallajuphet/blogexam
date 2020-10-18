@@ -1,19 +1,21 @@
 <template>
   <div id="login_cont">
     <div class="form_cont">
-      <form action="">
+      <form action="#" @submit.prevent="register_account()">
         <h2>Register</h2>
+        <div class="err" v-if="err != ''">{{ err }}</div>
+        <div class="msg" v-if="msg != ''">{{ msg }}</div>
         <div class="frm_group">
           <label for="">Email</label>
-          <input type="text" required />
+          <input v-model="email" type="email" required />
         </div>
         <div class="frm_group">
           <label for="">Passord</label>
-          <input type="password" required />
+          <input v-model="password" type="password" required />
         </div>
         <div class="frm_group">
           <label for="">Confirm Password</label>
-          <input type="password" required />
+          <input v-model="conpassword" type="password" required />
         </div>
         <button type="submit" class="login_btn">Register</button>
         <div class="login_frm_ftr">
@@ -31,13 +33,61 @@
 export default {
   name: "sub_register",
   data() {
-    return {};
+    return {
+      email: "",
+      password: "",
+      conpassword: "",
+      err: "",
+      msg: "",
+    };
   },
-  methods: {},
+  methods: {
+    register_account() {
+      if (this.password != this.conpassword) {
+        this.err = "Password are not matched!";
+        return;
+      }
+
+      let self = this;
+      let fdata = {
+        username: this.email,
+        password: this.password,
+      };
+
+      this.$store
+        .dispatch("users/register_account", fdata)
+        .then(() => {
+          self.msg = "Registered Successfully!";
+          self.err = "";
+          self.email = ""
+          self.password = ""
+          self.conpassword = ""
+        })
+        .catch((err) => {
+          self.err = err.status;
+        });
+    },
+  },
 };
 </script>
 
 <style scoped>
+.err {
+  background: #ee6b6b;
+  text-align: center;
+  margin: 0 0 20px;
+  padding: 13px;
+  border-radius: 4px;
+  color: #fff;
+}
+.msg {
+  background: #55c577;
+  text-align: center;
+  margin: 0 0 20px;
+  padding: 13px;
+  border-radius: 4px;
+  color: #fff;
+}
 #login_cont {
   width: 442px;
   margin: 184px auto 0;

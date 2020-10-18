@@ -4,8 +4,8 @@ const users = {
     namespaced: true,
     state: {
         users: [
-            { user_id: 1, username: "user", password: "12345" },
-            { user_id: 2, username: "user2", password: "12345" },
+            { user_id: 1, username: "sample@sample.com", password: "12345" },
+            { user_id: 2, username: "test@test.com", password: "12345" },
         ],
         is_logged: false,
         logged_user: {}
@@ -25,6 +25,19 @@ const users = {
 
             })
         },
+        register_account({ commit, state }, payload) {
+            return new Promise((resolve, reject) => {
+                console.log(payload)
+                let res = state.users.find(user => (user.username == payload.username));
+                if (res == undefined) {
+                    commit('REGISTER_ACCOUNT', payload)
+                    resolve({ status: "success" })
+                } else {
+                    reject({ status: "email address is already used!" })
+                }
+
+            })
+        },
         logout_account({ commit }) {
             commit('LOGOUT_ACCOUNT')
         }
@@ -40,6 +53,14 @@ const users = {
 
     },
     mutations: {
+        REGISTER_ACCOUNT(state, payload) {
+            let new_user = {
+                user_id: users.length + 1,
+                username: payload.username,
+                password: payload.password,
+            }
+            state.users.push(new_user)
+        },
         LOGIN_ACCOUNT(state, payload) {
             state.is_logged = true;
             state.logged_user = { user_id: payload }

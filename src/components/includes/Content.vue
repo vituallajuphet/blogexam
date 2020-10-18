@@ -5,25 +5,29 @@
         <div class="main_cont">
           <div class="main_top">
             <h1 class="h1_title">{{ heading_title }}</h1>
-            <div class="create_post_cont">
+            <div class="create_post_cont" v-if="is_auth">
               <router-link :to="{ path: '/admin-newpost' }" replace
                 >Create Post</router-link
               >
             </div>
           </div>
           <div class="post_container">
-            <div
-              class="post_data"
-              @click="view_post(post.post_id)"
-              v-for="post in get_posts"
-              :key="post.post_id"
-            >
-              <img :src="get_src_img(post.img)" alt="post image" />
-              <div class="content_txt">
-                <span class="cont_date">{{ post.post_date }}</span>
-                <p>{{ post.post_title }}</p>
+            <transition-group name="fade">
+              <div
+                class="post_data"
+                @click="view_post(post.post_id)"
+                v-for="post in get_posts"
+                :key="post.post_id"
+              >
+                <img :src="get_src_img(post.img)" alt="post image" />
+                <div class="content_txt">
+                  <span class="cont_date">{{
+                    convert_date(post.post_date)
+                  }}</span>
+                  <p>{{ post.post_title }}</p>
+                </div>
               </div>
-            </div>
+            </transition-group>
           </div>
           <div class="load_more_cont">
             <button :disabled="reach_limit" @click="update_limitation()">
@@ -49,7 +53,11 @@ export default {
   },
   methods: {
     get_src_img(img) {
-      return require("@/assets/images/" + img);
+      if (img.search("blob") != -1) {
+        return img;
+      } else {
+        return require("@/assets/images/" + img);
+      }
     },
     update_limitation() {
       if (this.post_show_limit + 6 <= this.posts.length) {
@@ -64,6 +72,21 @@ export default {
       } else {
         this.$router.push({ name: "admin_viewpost", params: { id: id } });
       }
+    },
+    convert_date(dte, sep = ".") {
+      let dt = new Date();
+      if (dte != undefined) {
+        dt = new Date(dte);
+      }
+      return (
+        dt.getFullYear() +
+        sep +
+        (dt.getMonth() + 1) +
+        sep +
+        (dt.getDate().toString().length == 1
+          ? "0" + dt.getDate()
+          : dt.getDate())
+      );
     },
   },
   mounted() {

@@ -4,13 +4,15 @@
       <div class="wrapper">
         <div class="brn_cont">
           <div class="slider_cont">
-            <figure
-              v-for="item in banner_imgs"
-              v-show="is_current(item.id)"
-              :key="item.id"
-            >
-              <img :src="get_src_img(item.filename)" alt="woman smiling" />
-            </figure>
+            <transition-group name="fade">
+              <figure
+                v-for="item in banner_imgs"
+                v-show="is_current(item.id)"
+                :key="item.id"
+              >
+                <img :src="get_src_img(item.filename)" alt="woman smiling" />
+              </figure>
+            </transition-group>
           </div>
           <div class="brn_info">
             <p>
@@ -100,3 +102,13 @@ export default {
   computed: {},
 };
 </script>
+
+<style  scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>

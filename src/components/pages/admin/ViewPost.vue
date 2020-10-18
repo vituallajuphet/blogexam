@@ -12,10 +12,10 @@
                 >Edit Post</router-link
               >
             </div>
-            <div class="post_date">{{ post.post_date }}</div>
+            <div class="post_date">{{ convert_date(post.post_date) }}</div>
             <div class="post_content">{{ post.post_title }}</div>
             <figure>
-              <img src="@/assets/images/post_img1.jpg" alt="img" />
+              <img :src="get_img_link(post.img)" alt="img" />
             </figure>
             <div class="post_datas">
               <p>{{ post.post_content }}</p>
@@ -58,6 +58,35 @@ export default {
   computed: {
     get_post_name() {
       return this.post.post_content;
+    },
+  },
+  methods: {
+    get_img_link(imgs) {
+      let link = "";
+      if (imgs == undefined) {
+        return;
+      }
+      if (imgs.search("blob") != -1) {
+        link = imgs;
+      } else {
+        link = require("@/assets/images/" + imgs);
+      }
+      return link;
+    },
+    convert_date(dte, sep = ".") {
+      let dt = new Date();
+      if (dte != undefined) {
+        dt = new Date(dte);
+      }
+      return (
+        dt.getFullYear() +
+        sep +
+        (dt.getMonth() + 1) +
+        sep +
+        (dt.getDate().toString().length == 1
+          ? "0" + dt.getDate()
+          : dt.getDate())
+      );
     },
   },
 };

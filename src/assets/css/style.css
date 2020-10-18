@@ -70,8 +70,10 @@ header .logo_cont{float: left;}
 /* main */
 main {}
 main .post_container{text-align: center;}
-.post_data { display: inline-block; vertical-align: top; width: 100%; max-width: 340px; text-align: center; border: 1px solid #222; padding: 40px 29px; margin: 0px 14px 65px; cursor: pointer;}
+.post_data { display: inline-block; vertical-align: top; width: 100%; max-width: 340px; text-align: center; border: 1px solid #222; padding: 40px 29px; margin: 0px 14px 65px; cursor: pointer;min-height: 439px;}
 .post_data p{text-align: left;}
+
+.post_data img{width: 100%; height: 199px;object-fit: cover;}
 
 main .h1_title { font-size: 46px; line-height: 100%; margin: 90px 0 84px; }
 .main_cont { padding: 0 0 185px; }
@@ -83,6 +85,17 @@ main .load_more_cont button{width: 340px; background: #222; text-align: center; 
 
 .load_more_cont button[disabled="disabled"]{cursor: not-allowed;opacity: .6;}
 
+.pre_loader{ position: fixed; width: 100%; top: 0; right: 0; height: 100%; background: rgba(0,0,0, .9); z-index: 123123; }
+.pre_cont{text-align: center;
+font-size: 32px;
+position: relative;
+color: #fff;
+width: 100%;
+max-width: 400px;
+margin: 96px auto 30px;
+background: #111;
+height: 230px;
+padding: 15px;}
 
 /* footer */
 footer{}

@@ -9,10 +9,10 @@
           <div class="wrapper2">
             <div class="btn_container">
               <a href="javascript:;" @click="save_post()">Save Post</a>
-              <a href="javascript:;">Cancel</a>
+              <a href="javascript:;" @click="cancel_post()">Cancel</a>
             </div>
             <div class="form_post_cont">
-              <div class="dates">2020.12.12</div>
+              <div class="dates">{{ convert_date() }}</div>
               <textarea
                 name="title"
                 v-model="title"
@@ -88,20 +88,51 @@ export default {
   methods: {
     save_post() {
       let self = this;
-      if (self.title == "" || self.content == "") {
+      if (self.title == "" || self.content == "" || self.url == "") {
         alert("Please fill up the form!");
+        return;
       }
+      let dta = {
+        title: self.title,
+        content: self.content,
+        image_url: self.url,
+        post_date: this.convert_date(new Date(), "-"),
+      };
+
+      this.$store.dispatch("posts/save_posts", dta).then(() => {
+        let latest_id = this.$store.getters["posts/get_latest_post_id"];
+        this.$router.push({
+          name: "admin_viewpost",
+          params: { id: latest_id },
+        });
+      });
+    },
+    cancel_post() {
+      this.$store.dispatch("preloader/set_preloader", {
+        txt: "Are you sure to discard?",
+        show: true,
+      });
     },
     removeUrl() {
       this.url = "";
     },
     handleFileDrop(e) {
       const file2 = e.dataTransfer.files[0];
-      this.url = URL.createObjectURL(file2);
+      if (!this.is_image(file2.name)) {
+        alert("Please upload image only!");
+        return;
+      } else {
+        this.url = URL.createObjectURL(file2);
+      }
     },
     handleFileInput(e) {
       const file2 = e.target.files[0];
-      this.url = URL.createObjectURL(file2);
+      if (!this.is_image(file2.name)) {
+        alert("Please upload image only!");
+        return;
+      } else {
+        this.url = URL.createObjectURL(file2);
+      }
     },
     removeFile(fileKey) {
       this.files.splice(fileKey, 1);
@@ -112,8 +143,55 @@ export default {
     fileDragOut() {
       this.is_drop_in = false;
     },
+
+    is_image(file) {
+      var r = /.+\.(.+)$/.exec(file);
+
+      let res = r ? r[1] : null;
+      let ret = false;
+
+      if (res != null) {
+        if (
+          res.toLowerCase() != "png" &&
+          res.toLowerCase() != "jpg" &&
+          res.toLowerCase() != "jpeg"
+        ) {
+          ret = false;
+        } else {
+          ret = true;
+        }
+      }
+      return ret;
+    },
+    convert_date(dte, sep = ".") {
+      let dt = new Date();
+      if (dte != undefined) {
+        dt = new Date(dte);
+      }
+      return (
+        dt.getFullYear() +
+        sep +
+        (dt.getMonth() + 1) +
+        sep +
+        (dt.getDate().toString().length == 1
+          ? "0" + dt.getDate()
+          : dt.getDate())
+      );
+    },
+    confirm_alert(res) {
+      if (res) {
+        this.$router.push({
+          name: "admin_home",
+        });
+      }
+      this.$store.dispatch("preloader/set_state", false);
+    },
   },
-  computed: {},
+  computed: {
+    preloader_state() {
+      return this.$store.getters["preloader/get_preload_state"];
+    },
+  },
 };
 </script>
 

@@ -9,6 +9,7 @@ import viewpost from '@/components/pages/guest/ViewPost.vue'
 // admin
 import admin_home from '@/components/pages/admin/Home.vue'
 import admin_viewpost from '@/components/pages/admin/ViewPost.vue'
+import admin_edit_post from '@/components/pages/admin/EditPost.vue'
 import create_post from '@/components/pages/admin/CreatePost.vue'
 
 
@@ -30,6 +31,8 @@ const router = new VueRouter({
         { path: '/admin-home', name: 'admin_home', component: admin_home, meta: { requireAuth: true } },
         { path: '/admin-newpost', name: 'create_post', component: create_post, meta: { requireAuth: true } },
         { path: '/admin-viewpost/:id', name: 'admin_viewpost', component: admin_viewpost, props: true, meta: { requireAuth: true } },
+        { path: '/admin-editpost/:id', name: 'admin_edit_post', component: admin_edit_post, props: true, meta: { requireAuth: true } },
+
 
     ]
 })

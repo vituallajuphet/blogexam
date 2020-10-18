@@ -3,6 +3,8 @@ import router from './Router'
 import store from './Store'
 import App from './App.vue'
 import "@/assets/css/style.css"
+import "@/assets/css/media.css"
+import "@/assets/css/animation.css"
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requireAuth)

@@ -14,7 +14,7 @@
                   ルテキストサンプルテキストサンプルテキストサンプル ルテキスト
                 </p>
               </div>
-              <span class="bck_top"
+              <span class="bck_top" @click="scrollTop()"
                 >Top <img src="@/assets/images/arr-top.png" alt="arrow"
               /></span>
             </div>
@@ -37,6 +37,7 @@ export default {
   data() {
     return {
       copyright: "Copyright©2017-2019 Blog Inc.",
+      visible: false,
     };
   },
   methods: {
@@ -44,6 +45,14 @@ export default {
       return require("@/assets/images/" + img);
     },
     update_limitation() {},
+    scrollTop: function () {
+      this.intervalId = setInterval(() => {
+        if (window.pageYOffset === 0) {
+          clearInterval(this.intervalId);
+        }
+        window.scroll(0, window.pageYOffset - 50);
+      }, 20);
+    },
   },
   computed: {
     get_posts() {
@@ -54,3 +63,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.bck_top {
+  cursor: pointer;
+}
+</style>

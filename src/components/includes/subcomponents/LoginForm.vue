@@ -6,10 +6,10 @@
         <div class="err" v-if="err != ''">{{ err }}</div>
         <div class="frm_group">
           <label for="">Email</label>
-          <input v-model="username" type="text" required />
+          <input v-model="username" type="email" required />
         </div>
         <div class="frm_group">
-          <label for="">Passord</label>
+          <label for="">Password</label>
           <input v-model="password" type="password" required />
         </div>
         <button type="submit" class="login_btn">Login</button>
@@ -34,6 +34,7 @@ export default {
       err: "",
     };
   },
+  components: {},
   methods: {
     submit_form() {
       let self = this;
